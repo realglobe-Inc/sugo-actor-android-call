@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="@string/default_phone_number"
+        android:dialogMessage="通報先の電話番号を入力してください"
+        android:dialogTitle="通報先電話番号"
+        android:key="@string/key_phone_number"
+        android:summary=""
+        android:title="通報先電話番号" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_server"
+        android:dialogMessage="通報先 sugo-hub の URL を入力してください"
+        android:dialogTitle="通報先アドレス"
+        android:key="@string/key_server"
+        android:summary=""
+        android:title="通報先アドレス" />
+
+    <EditTextPreference
+        android:defaultValue="@integer/default_report_interval"
+        android:dialogMessage="通報先 sugo-hub に状態を報告する間隔を秒単位で入力してください"
+        android:dialogTitle="報告間隔（秒）"
+        android:key="@string/key_report_interval"
+        android:numeric="integer"
+        android:summary=""
+        android:title="報告間隔（秒）" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_actor_suffix"
+        android:dialogMessage="ID を入力してください\nsugo-actor としてのキーは先頭にアプリケーション固有のタグを付けたものになります"
+        android:dialogTitle="クライアント ID"
+        android:key="@string/key_actor_suffix"
+        android:summary=""
+        android:title="クライアント ID" />
+
+</PreferenceScreen>
