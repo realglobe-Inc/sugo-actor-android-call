@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile Location location;
 
     private Actor actor;
+    private int reportId;
 
     private TextView messageView;
     private Button callButton;
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private Button resetButton;
     private TextView errorView;
     private Handler handler;
-    private int reportId;
 
     /**
      * 位置情報取得モジュールを設定
@@ -145,8 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.errors = new LinkedList<>();
 
-        setContentView(R.layout.activity_main);
+        this.reportId = Math.abs((new Random(System.currentTimeMillis())).nextInt());
 
+        setContentView(R.layout.activity_main);
 
         this.messageView = (TextView) findViewById(R.id.text_message);
         this.callButton = (Button) findViewById(R.id.button_call);
