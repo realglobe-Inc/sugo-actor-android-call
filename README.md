@@ -8,7 +8,7 @@ Android で動く、通報用 actor。
 + [emergency](#event/emergency)
 
 
-### emergency <a id="event/emergency">
+### <span id="event/emergency">emergency </span>
 
 通報した。
 データは以下の要素を含む。
