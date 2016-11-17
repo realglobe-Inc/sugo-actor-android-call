@@ -11,6 +11,7 @@ import java.util.Map;
 import io.socket.client.Ack;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
+import jp.realglobe.sg.socket.Constants;
 
 /**
  * sugos の Actor
@@ -85,7 +86,7 @@ final class Actor {
 
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_KEY, this.key);
-        this.socket.emit(SocketConstants.GreetingEvents.HI, new JSONObject(data), (Ack) args -> {
+        this.socket.emit(Constants.GreetingEvents.HI, new JSONObject(data), (Ack) args -> {
             Log.d(LOG_TAG, socket.id() + " greeted");
             processAfterGreeting();
         });
@@ -110,7 +111,7 @@ final class Actor {
         data.put(KEY_NAME, this.module);
         data.put(KEY_SPEC, specData);
 
-        socket.emit(SocketConstants.RemoteEvents.SPEC, new JSONObject(data), (Ack) args -> {
+        socket.emit(Constants.RemoteEvents.SPEC, new JSONObject(data), (Ack) args -> {
             Log.d(LOG_TAG, socket.id() + " sent specification");
             if (this.onConnection != null) {
                 this.onConnection.run();
@@ -141,7 +142,7 @@ final class Actor {
         if (data != null) {
             wrapData.put(KEY_DATA, data);
         }
-        socket.emit(SocketConstants.RemoteEvents.PIPE, new JSONObject(wrapData));
+        socket.emit(Constants.RemoteEvents.PIPE, new JSONObject(wrapData));
     }
 
     /**
@@ -163,7 +164,7 @@ final class Actor {
 
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_KEY, this.key);
-        socket.emit(SocketConstants.GreetingEvents.BYE, new JSONObject(data), (Ack) args -> socket.disconnect());
+        socket.emit(Constants.GreetingEvents.BYE, new JSONObject(data), (Ack) args -> socket.disconnect());
     }
 
 }
