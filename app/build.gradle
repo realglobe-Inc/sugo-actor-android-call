@@ -44,7 +44,7 @@ dependencies {
 repositories {
     jcenter()
     maven {
-        url 'https://realglobe.artifactoryonline.com/realglobe/libs-release'
+        url "${artifactory_contextUrl}/libs-release"
         credentials {
             username = "${artifactory_user}"
             password = "${artifactory_password}"
