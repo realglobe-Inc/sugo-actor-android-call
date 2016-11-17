@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_LOCATION = "location";
     private static final String KEY_DATE = "date";
     private static final String KEY_ID = "id";
+    private static final String KEY_PHONE_NUMBER = "phoneNumber";
 
     private static final int PERMISSION_REQUEST_CODE = 24876;
     private static final String[] REQUIRED_PERMISSIONS = new String[]{
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     // 現在位置
     private volatile Location location;
+    // 電話番号
+    private volatile String phoneNumber;
 
     private Actor actor;
     private int reportId;
@@ -221,6 +225,12 @@ public class MainActivity extends AppCompatActivity {
             required.remove(permissions[i]);
         }
 
+        if (!required.contains(Manifest.permission.READ_SMS)) {
+            final TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            this.phoneNumber = manager.getLine1Number();
+            Log.i(LOG_TAG, "Phone number is " + this.phoneNumber);
+        }
+
         showPermissionStatus(required.isEmpty());
     }
 
@@ -314,8 +324,9 @@ public class MainActivity extends AppCompatActivity {
         if (curLocation != null) {
             data.put(KEY_LOCATION, Arrays.asList(curLocation.getLatitude(), curLocation.getLongitude(), curLocation.getAltitude()));
         } else {
-            data.put(KEY_LOCATION, Arrays.asList(0, 0, 0));
+            data.put(KEY_LOCATION, null);
         }
+        data.put(KEY_PHONE_NUMBER, this.phoneNumber);
         actor.emit(EVENT_EMERGENCY, data);
         Log.d(LOG_TAG, "Sent report");
 
