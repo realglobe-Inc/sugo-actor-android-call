@@ -7,7 +7,7 @@
     <string name="button_reset">リセット</string>
     <string name="key_report_interval">report_interval</string>
     <string name="key_server">server</string>
-    <string name="default_server">http://edac.online/</string>
+    <string name="default_server">http://edac.online/jissho2</string>
     <string name="actor_prefix">qq:call:</string>
     <string name="default_actor_suffix">1</string>
     <string name="name">androidCall</string>
