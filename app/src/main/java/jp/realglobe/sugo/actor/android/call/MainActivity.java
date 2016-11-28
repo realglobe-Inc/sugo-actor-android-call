@@ -41,6 +41,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import jp.realglobe.sugo.actor.Actor;
+import jp.realglobe.sugo.actor.Emitter;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getName();
@@ -295,12 +298,14 @@ public class MainActivity extends AppCompatActivity {
         final String server = preferences.getString(getString(R.string.key_server), getString(R.string.default_server));
         final String key = getString(R.string.actor_prefix) + preferences.getString(getString(R.string.key_actor_suffix), getString(R.string.default_actor_suffix));
 
+        this.actor = new Actor(server, key, getString(R.string.name), null);
+        final Emitter emitter;
         try {
-            this.actor = new Actor(server, key, getString(R.string.name), getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName, getString(R.string.description), getString(R.string.module));
+            emitter = this.actor.addModule(getString(R.string.name), getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName, getString(R.string.description), new Object());
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
-        this.actor.setOnConnection(() -> reportRoutine(this.actor, nextReportId()));
+        this.actor.setOnConnect(() -> reportRoutine(emitter, nextReportId()));
         this.actor.connect();
     }
 
@@ -311,9 +316,9 @@ public class MainActivity extends AppCompatActivity {
         return this.reportId++;
     }
 
-    private void reportRoutine(Actor actor, int reportId) {
-        // this.actor を使うと多重に動いてしまう可能性があるため actor を引数で受け取る
-        if (!actor.isConnecting()) {
+    private void reportRoutine(Emitter emitter, int reportId) {
+        if (this.actor == null) {
+            // 終了
             return;
         }
 
@@ -327,12 +332,12 @@ public class MainActivity extends AppCompatActivity {
             data.put(KEY_LOCATION, null);
         }
         data.put(KEY_PHONE_NUMBER, this.phoneNumber);
-        actor.emit(EVENT_EMERGENCY, data);
+        emitter.emit(EVENT_EMERGENCY, data);
         Log.d(LOG_TAG, "Sent report");
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final long interval = 1_000L * Long.parseLong(preferences.getString(getString(R.string.key_report_interval), String.valueOf(getResources().getInteger(R.integer.default_report_interval))));
-        this.handler.postDelayed(() -> reportRoutine(actor, reportId), interval);
+        this.handler.postDelayed(() -> reportRoutine(emitter, reportId), interval);
     }
 
     /**
