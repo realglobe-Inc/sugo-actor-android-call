@@ -173,6 +173,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (this.actor != null) {
+            this.actor.disconnect();
+            this.actor = null;
+        }
+        this.googleApiClient.disconnect();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
