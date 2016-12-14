@@ -173,6 +173,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (this.actor != null) {
+            this.actor.disconnect();
+            this.actor = null;
+        }
+        this.googleApiClient.disconnect();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -298,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         final String server = preferences.getString(getString(R.string.key_server), getString(R.string.default_server));
         final String key = getString(R.string.actor_prefix) + preferences.getString(getString(R.string.key_actor_suffix), getString(R.string.default_actor_suffix));
 
-        this.actor = new Actor(server, key, getString(R.string.name), null);
+        this.actor = new Actor(key, getString(R.string.name), null);
         final Emitter emitter;
         try {
             emitter = this.actor.addModule(getString(R.string.name), getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName, getString(R.string.description), new Object());
@@ -306,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException();
         }
         this.actor.setOnConnect(() -> reportRoutine(emitter, nextReportId()));
-        this.actor.connect();
+        this.actor.connect(server);
     }
 
     private synchronized int nextReportId() {
