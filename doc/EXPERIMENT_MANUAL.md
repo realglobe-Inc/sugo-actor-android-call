@@ -1,4 +1,4 @@
-# SugoActorCall の使い方
+# SugoActorCall アプリの使い方
 
 
 ## android デバイスの準備
