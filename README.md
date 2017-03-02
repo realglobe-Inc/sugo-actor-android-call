@@ -34,3 +34,8 @@ Android で動く、通報用 actor。
   "phoneNumber": "0123456789"
 }
 ```
+
+
+## License
+
+Apache License, Version 2.0
